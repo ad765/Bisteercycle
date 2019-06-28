@@ -1,0 +1,29 @@
+%function [K,Kmat] = gainSchedCreate(param)
+
+% par = param;
+
+% Create a grid of all bike steer angles
+dlf = linspace( -pi/6, pi/6, 5 );
+dlr = linspace( -pi/6, pi/6, 5 );
+V   = linspace( 1, 10, 5 );
+[dlfgrid, dlrgrid, Vgrid] = ndgrid( dlf, dlr, V );
+
+% Organize each gridpoint as a row
+grid = zeros( length(dlf)*length(dlr), 5);
+Kmat = zeros( 4, 5, length(dlf)*length(dlr) );
+for i = 1:length(dlf)
+    for j = length(dlr)
+        for k = length(V)
+            Xlin = findLinPts(par,[0,V(k),0,dlf(i),dlr(j)]);
+            % Calculate the gains
+            Kmat(:,:,i) = fixedLQR(par,Xlin);
+        end
+    end
+end
+
+
+K = interpn(dlfgrid,dlrgrid,Vgrid,Kmat,pi/15,-pi/12,4,'pchip');
+
+% Kmat = ndgrid(pgrid,Vgrid,pdgrid,dlfgrid,dlrgrid);
+
+

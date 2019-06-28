@@ -1,18 +1,20 @@
-function K = fixedLQR(param,Xlin)
+function K = fixedLQR(bike_p,sys_p,Xlin)
 % LQR controller
 
-% Unpack parameters
-I11 = param.I11;
-I22 = param.I22;
-I33 = param.I33;
-I13 = param.I13;
-g = param.g;
-h = param.h;
-lF = param.lF;
-lR = param.lR;
-m = param.m;
-Q = param.Q;
-R = param.R;
+% Bicycle parameters
+I11 = bike_p.I11;
+I22 = bike_p.I22;
+I33 = bike_p.I33;
+I13 = bike_p.I13;
+g = bike_p.g;
+h = bike_p.h;
+lF = bike_p.lF;
+lR = bike_p.lR;
+m = bike_p.m;
+
+% LQR parameters
+Q = sys_p.Q;
+R = sys_p.R;
 
 % Linearization points
 p      = Xlin(1);

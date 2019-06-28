@@ -1,9 +1,9 @@
-function plotting( ans_struct, param, POINTS, a, b, c, d, e  )
+function plotting( ans_struct, sys_p, bike_p, ctr_p, POINTS, a, b, c, d, e  )
 
 % Unpack parameters
-h = param.h;
-lR = param.lR;
-lF = param.lF;
+h = bike_p.h;
+lR = bike_p.lR;
+lF = bike_p.lF;
 
 time = linspace( ans_struct.x(1), ans_struct.x(end), POINTS );
 soln = deval(ans_struct,time);
@@ -34,17 +34,17 @@ dlfd = zeros(size(time));
 dlrd = zeros(size(time));
 %
 for k = 1:length(time)
-    K = zeros(size(param.Kmat));
-    for i = 1:size(param.Kmat,1)
-        for j = 1:size(param.Kmat,2)
-            K(i,j) = param.Kmat{i,j}(dlf(k),dlr(k),V(k));
+    K = zeros(size(ctr_p.Kmat));
+    for i = 1:size(ctr_p.Kmat,1)
+        for j = 1:size(ctr_p.Kmat,2)
+            K(i,j) = ctr_p.Kmat{i,j}(dlf(k),dlr(k),V(k));
         end
     end
-    u           = -K * [P(k)-param.pr(time(k));
-                        V(k)-param.Vr(time(k));
-                        Pd(k)-param.pdr(time(k));
-                        dlf(k)-param.dlfr(time(k));
-                        dlr(k)-param.dlrr(time(k))];
+    u           = -K * [P(k)-sys_p.pr(time(k));
+                        V(k)-sys_p.Vr(time(k));
+                        Pd(k)-sys_p.pdr(time(k));
+                        dlf(k)-sys_p.dlfr(time(k));
+                        dlr(k)-sys_p.dlrr(time(k))];
     TF(k)       = u(1);
     TR(k)       = u(2);
     dlfd(k)     = u(3);
@@ -103,7 +103,6 @@ grid on
 plot(time,P,'b-');
 plot(time,S,'r-');
 xlabel('t (s)')
-ylabel('r (m)')
 title('Angular Position vs. $t$ ','Interpreter','latex')
 xlabel('Time (t)')
 legend({'$\phi$','$\psi$'},'Interpreter','latex')
@@ -114,7 +113,6 @@ grid on
 plot(time,Pd,'b-');
 plot(time,Sd,'r-');
 xlabel('t (s)')
-ylabel('v (m/s)')
 title('Angular Rates vs. $t$ ','Interpreter','latex')
 xlabel('Time (t)')
 legend({'$\dot{\phi}$','$\dot{\psi}$'},'Interpreter','latex')
@@ -123,7 +121,7 @@ hold off
 
 
 % Energy
-[E, LKE, RKE, PE] = calcEnergy( time, ans_struct, param );
+[E, LKE, RKE, PE] = calcEnergy( time, ans_struct, bike_p );
 figure(d)
 hold on
 grid on

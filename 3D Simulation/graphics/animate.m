@@ -1,13 +1,13 @@
-function animate( ans_struct, param, angle, scale)
+function animate( ans_struct, bike_p, angle, scale)
 % Real-time animation of the bicycle
 
 % Unpack parameters
-rF  = param.rF;
-rR  = param.rR;
-lF  = param.lF;
-lR  = param.lR;
-h   = param.h;
-hw  = param.hw;
+rF  = bike_p.rF;
+rR  = bike_p.rR;
+lF  = bike_p.lF;
+lR  = bike_p.lR;
+h   = bike_p.h;
+hw  = bike_p.hw;
 
 % Animate simulation
 anim    = figure;%('units','normalized','outerposition',[0 0 1 1]);

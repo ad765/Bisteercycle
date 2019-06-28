@@ -7,26 +7,35 @@ close all
 my_path = pwd;
 addpath( genpath( my_path ) )
 
-%% parameters
+%% Parameters
 
 % Uncomment this if you would like to store a new set of variables. Name
 % the file something OTHER THAN 'parameters'
 %
-par = param;
-% save([pwd,'/parameters/','bike1.mat'],'-struct','par')
+par     = struct;
+bike_p	= bike_param();
+sys_p 	= system_param(bike_p);
+ctr_p   = control_param(sys_p,bike_p,par);
+% save([pwd,'\parameters\ctr\','ctr1.mat'],'-struct','ctr_p')
+% save([pwd,'\parameters\bike\','bike1.mat'],'-struct','bike_p')
 %}
 
-% par = load('bike1.mat');
+%{
+bike_p  = load('bike1.mat');
+ctr_p   = load('ctr1.mat');
+%}
 
-%% solution
+
+%% Solution
 t_final = 20;       % final time
 n       = 1e4;      % number of points in time interval
 tol     = 1e-3;     % ODE solver tolerance
-S       = bike_solver( par, t_final, tol );
+S       = bike_solver( sys_p, bike_p, ctr_p, t_final, tol );
 
-%% comparing methods
-animate_v2( S, par, 0.1)
-% animate( S, par, 'local', 1)
-% animate( S, par, 'lean', 1)
-% plotting( S, par, n, 2, 3, 4, 5, 6 )
 
+%% Visualization
+animate_v3( S, bike_p, 2)
+% plotting( S, sys_p, bike_p, ctr_p, n, 2, 3, 4, 5, 6 )
+
+% animate( S, bike_p, 'local', 1)
+% animate( S, bike_p, 'lean', 1)

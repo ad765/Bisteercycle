@@ -10,7 +10,7 @@ h   = param.h;
 hw  = param.hw;
 
 % Animate simulation
-figure('units','normalized','outerposition',[0 0 1 1]);
+figure;%('units','normalized','outerposition',[0 0 1 1]);
 
 % Maximum distance
 dist = 2*max([lF,lR]);
@@ -155,20 +155,17 @@ while (t_temp < ans_struct.x(end))
     grid on
     axis equal
     plot([0,0],[0,h],'k--','LineWidth',2)
-    plot(h*sin(P),h*cos(P),'ko','MarkerSize',20,'MarkerFaceColor',[0,0,0])
+    plot([h*sin(P)],[h*cos(P)],'ko','MarkerSize',10,'MarkerFaceColor',[0,0,0])
     plot([0,h*sin(P)],[0,h*cos(P)],'k-','LineWidth',2)
     title('Bicycle Lean')
     hold off
     
     % Draw figure at current step
     drawnow
-    clf
     
     t_temp  = scale*toc;
     fprintf('t = %d\n',t_temp)
     
 end
-
-close all
 
 end
