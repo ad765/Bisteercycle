@@ -1,5 +1,5 @@
-# Bisteercycle
-Preliminary analysis of the dynamics and control of the bisteercycle.
+# Dual-Steering Bicycle
+Preliminary analysis of the dynamics and control of the dual-steering bicycle.
 
 Analysis was first done in 2D, looking at the aerial-view dynamics of the bicycle treating the motion of each wheel as a non-holonomic constraint at the contact point with the ground. Trajectories for the bicycle were created from arbitrary inputs for the steering angles. It was shown that sinusoidal steering inputs gave quasi-periodic trajectories for the bicycle in the plane.
 
