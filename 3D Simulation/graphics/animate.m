@@ -1,5 +1,18 @@
-function animate( ans_struct, bike_p, angle, scale)
+function animate( ans_struct, bike_p, angle, tarray, name )
 % Real-time animation of the bicycle
+
+% Re-evaluate solution at provided time array
+soln = deval(ans_struct,tarray);
+
+% Unpack state
+Xtemp   = soln(1,:);
+Ytemp   = soln(2,:);
+Ptemp   = soln(3,:);
+Stemp   = soln(4,:);
+dlftemp = soln(7,:);
+dlrtemp = soln(8,:);
+
+clear soln
 
 % Unpack parameters
 rF  = bike_p.rF;
@@ -35,20 +48,16 @@ rear_wheel  = plot3(0, 0, 0, 'r', 'LineWidth', 3);
 front_wheel = plot3(0, 0, 0, 'b', 'LineWidth', 3);
 %}
 
-t_temp = 0;
-tic;
-
-while (t_temp < ans_struct.x(end))
-    
-    soln = deval(ans_struct,t_temp);
+% Update graphics
+parfor i = 1:length(tarray)
     
     % Unpack state
-    X   = soln(1,:);
-    Y   = soln(2,:);
-    P   = soln(3,:);
-    S   = soln(4,:);
-    dlf = soln(7,:);
-    dlr = soln(8,:);
+    X   = Xtemp(i);
+    Y   = Ytemp(i);
+    P   = Ptemp(i);
+    S   = Stemp(i);
+    dlf = dlftemp(i);
+    dlr = dlrtemp(i);
     
     % Calculation of coordinates of points of interest
     rear_wheel_X    = X;
@@ -133,18 +142,24 @@ while (t_temp < ans_struct.x(end))
     set( front_wheel, 'ZData', wheel_FZ )
     
     % Plot the wheel traces
-    plot3( rear_wheel_X,	rear_wheel_Y,  0,	'r.', 'MarkerSize', 0.5 )
-    plot3( front_wheel_X,	front_wheel_Y, 0,   'b.', 'MarkerSize', 0.5 )
+    % plot3( rear_wheel_X,	rear_wheel_Y,  0,	'r.', 'MarkerSize', 0.5 )
+    % plot3( front_wheel_X,	front_wheel_Y, 0,   'b.', 'MarkerSize', 0.5 )
     
     % Draw figure at current step
     drawnow
     
-    t_temp  = scale*toc;
-    fprintf('t = %d\n',t_temp)
+    % Movie
+    M(i) = getframe(anim);
     
+    disp(tarray(i))
+        
 end
 
-
 hold off
+
+myVideo = VideoWriter([name,'.avi']);
+open(myVideo);
+writeVideo(myVideo, M);
+close(myVideo);
 
 end
